@@ -3,17 +3,37 @@
 from __future__ import annotations
 
 import json
+import sys
 import time
 from pathlib import Path
 from typing import Any
 
 
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.mmsep_runtime import MMSepConfig, MMSepRuntime
+
+
 class LocalLlavaAdapter:
     """Load local LLaVA once and expose deterministic single-image inference."""
 
-    def __init__(self, model_path: Path, vision_model_path: Path) -> None:
+    def __init__(
+        self,
+        model_path: Path,
+        vision_model_path: Path,
+        *,
+        mmsep_layer: int = 16,
+        visual_keep_ratio: float = 0.5 / 2.718281828459045,
+    ) -> None:
         self.model_path = model_path.resolve()
         self.vision_model_path = vision_model_path.resolve()
+        self.mmsep_config = MMSepConfig(
+            layer=mmsep_layer,
+            visual_keep_ratio=visual_keep_ratio,
+        )
+        self.mmsep_runtime: MMSepRuntime | None = None
         self._loaded = False
 
     def load(self) -> None:
@@ -51,6 +71,8 @@ class LocalLlavaAdapter:
             )
         )
         self.torch = torch
+        self.mmsep_runtime = MMSepRuntime(self.model, self.mmsep_config)
+        self.mmsep_runtime.install()
         self._loaded = True
 
     def infer(
@@ -60,8 +82,12 @@ class LocalLlavaAdapter:
         *,
         seed: int,
         max_new_tokens: int = 24,
+        mode: str = "baseline",
     ) -> dict[str, Any]:
         self.load()
+
+        if mode not in {"baseline", "mmsep"}:
+            raise ValueError("mode must be 'baseline' or 'mmsep'")
 
         from PIL import Image
         from llava.constants import (
@@ -98,6 +124,24 @@ class LocalLlavaAdapter:
             return_tensors="pt",
         ).unsqueeze(0).to(self.model.device)
 
+        generation_kwargs: dict[str, Any] = {}
+        mmsep_cache = None
+        if mode == "mmsep":
+            image_positions = (input_ids[0] == IMAGE_TOKEN_INDEX).nonzero(as_tuple=False).flatten()
+            if image_positions.numel() != 1:
+                raise ValueError("MMSep test inference requires exactly one image token")
+            vision_tower = self.model.get_vision_tower()
+            image_token_length = int(getattr(vision_tower, "num_patches", 0))
+            if image_token_length <= 0:
+                raise RuntimeError("Unable to determine the number of LLaVA visual tokens")
+            if self.mmsep_runtime is None:
+                raise RuntimeError("MMSep runtime is not installed")
+            mmsep_cache = self.mmsep_runtime.make_cache(
+                image_start=int(image_positions[0].item()),
+                image_token_length=image_token_length,
+            )
+            generation_kwargs["past_key_values"] = mmsep_cache
+
         torch.cuda.reset_peak_memory_stats()
         started = time.perf_counter()
         try:
@@ -110,8 +154,9 @@ class LocalLlavaAdapter:
                     num_beams=1,
                     max_new_tokens=max_new_tokens,
                     use_cache=True,
+                    **generation_kwargs,
                 )
-        except torch.OutOfMemoryError as exc:
+        except torch.cuda.OutOfMemoryError as exc:
             torch.cuda.empty_cache()
             raise RuntimeError(
                 "CUDA 显存不足；请关闭占用显存的软件或减小 --max-new-tokens"
@@ -126,11 +171,22 @@ class LocalLlavaAdapter:
             "duration_ms": duration_ms,
             "peak_memory_gib": peak_memory_gib,
             "seed": seed,
+            "mode": mode,
+            "mmsep": mmsep_cache.stats() if mmsep_cache is not None else None,
         }
 
     def close(self) -> None:
         if not self._loaded:
             return
+        if self.mmsep_runtime is not None:
+            self.mmsep_runtime.uninstall()
         del self.model
-        self.torch.cuda.empty_cache()
+        try:
+            self.torch.cuda.empty_cache()
+        except RuntimeError:
+            # A CUDA device-side assertion poisons the process context; model
+            # errors are already recorded by the runner and must not be hidden
+            # by cleanup.
+            pass
+        self.mmsep_runtime = None
         self._loaded = False
