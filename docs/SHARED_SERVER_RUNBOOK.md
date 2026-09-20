@@ -256,6 +256,20 @@ The runner writes each completed result immediately and flushes each structured
 log event to disk. If SSH disconnects or a later case fails, completed evidence
 is retained.
 
+For the formal 15-case Baseline/MMSep comparison, use the unified entry point
+after setting the same approved GPU and model paths:
+
+```bash
+export MMSEP_RUNS_ROOT=/data/lichenxi/llava-7B/runs
+export SOURCE_COMMIT=<reviewed-local-commit>
+python scripts/run_module2_experiment.py --run-id module2-formal-001 \
+  > /data/lichenxi/llava-7B/runs/module2-formal-001.console.log 2>&1
+```
+
+This command loads the model once, runs both modes, performs the required
+repeat policy, and writes its own result manifest. Do not use a busy GPU for
+the two performance cases.
+
 ## 13. Inspect and send diagnostic evidence
 
 ```bash

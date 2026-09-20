@@ -17,6 +17,7 @@ if str(AI_ROOT) not in sys.path:
     sys.path.insert(0, str(AI_ROOT))
 
 from data.image_generators import generate_image  # noqa: E402
+from metrics.code_oracles import evaluate_output  # noqa: E402
 
 
 class LcxCaseDefinitionTests(unittest.TestCase):
@@ -54,6 +55,30 @@ class LcxCaseDefinitionTests(unittest.TestCase):
                     with Image.open(target) as image:
                         self.assertEqual(image.mode, "RGB")
                         self.assertEqual(image.size, (672, 448))
+
+
+class ExtendedOracleTests(unittest.TestCase):
+    def test_required_phrases_and_length_pass(self) -> None:
+        expected = {
+            "required_substrings": ["red circle", "blue square"],
+            "min_words": 8,
+            "forbidden_substrings": [],
+        }
+        result = evaluate_output(
+            "The red circle appears beside a clearly visible blue square today.",
+            expected,
+        )
+        self.assertTrue(result["passed"])
+        self.assertGreaterEqual(result["word_count"], 8)
+
+    def test_required_phrases_and_length_reject_short_output(self) -> None:
+        expected = {
+            "required_substrings": ["input", "analysis", "output"],
+            "min_words": 12,
+            "forbidden_substrings": [],
+        }
+        result = evaluate_output("Input goes through analysis to output.", expected)
+        self.assertFalse(result["passed"])
 
 
 if __name__ == "__main__":

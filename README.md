@@ -14,21 +14,50 @@ resource-release procedure.
 
 ## Current status
 
-The Baseline runner is connected to the official LLaVA v1.5 inference path.
-It remains guarded by preflight checks, so it will not load the 7B checkpoint
-until the model, CLIP vision tower, Python dependencies, and GPU budget all
-pass. MMSep integration remains a separate `wjn` work package.
+The repository now contains the complete 15-case suite and one unified runner.
+It loads LLaVA only once, runs the unchanged Baseline and the MMSep cache mode
+with the same generation parameters, and writes raw JSONL evidence, summaries,
+environment metadata, generated inputs, and a SHA-256 manifest. The agreed
+split is preserved in the case files: `lcx` owns 8 cases and `wjn` owns 7.
 
 No model weights, full datasets, API keys, raw run artifacts, course PDFs, or
 paper PDFs belong in the GitHub repository.
 
-## Planned execution modes
+## Execution modes
 
 - `baseline`: LLaVA v1.5 7B with its original cache behavior.
 - `mmsep`: the same model, weights, precision, inputs, and generation settings
   with MMSep enabled.
-- `mock`: a deterministic development backend used to verify configuration,
-  case loading, result serialization, and the CLI without model weights.
+- The older `mock` and Baseline-only workflow remains available for lightweight
+  development checks; it is not part of the formal 15-case result.
+
+## One-command formal experiment
+
+Before the run, select an idle GPU and set the two persistent model paths. A
+performance run is valid only while that GPU is otherwise idle.
+
+```bash
+export CUDA_VISIBLE_DEVICES=<approved-idle-gpu>
+export LLAVA_MODEL_PATH=/data/lichenxi/llava-7B/models/llava-v1.5-7b
+export LLAVA_VISION_TOWER_PATH=/data/lichenxi/llava-7B/models/clip-vit-large-patch14-336
+export MMSEP_RUNS_ROOT=/data/lichenxi/llava-7B/runs
+export SOURCE_COMMIT=<reviewed-local-commit>
+python scripts/run_module2_experiment.py --run-id module2-formal-001
+```
+
+The formal policy runs all 15 cases in both modes. Robustness, security, and
+fairness cases use seeds `42`, `2026`, and `925`; each performance case uses 2
+warmups followed by 5 measured runs. Use `--quick --case-id M2-FUN-201` only
+for a non-formal smoke test. A completed process may still contain genuine
+failed test verdicts; consult `summary/summary.json` instead of treating every
+model-quality failure as an infrastructure crash.
+
+CPU-only validation before transfer:
+
+```powershell
+python -m unittest tests.ai.test_all_cases_runner `
+  tests.ai.test_lcx_cases tests.ai.test_mmsep_runtime -v
+```
 
 ## Local configuration
 
