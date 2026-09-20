@@ -1,0 +1,49 @@
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+*.key
+/configs/**/*.local.json
+
+# Python caches and local tooling
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Model weights and model caches (never upload to GitHub)
+/models/
+/llava-v1.5-7b/
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.gguf
+*.onnx
+pytorch_model*.bin
+mm_projector.bin
+.cache/
+
+# Full datasets and generated experiment evidence
+/datasets/
+/artifacts/raw/
+/artifacts/summaries/
+/artifacts/colab/
+/artifacts/kaggle/
+/work_dirs/
+/tmp/
+*.log
+
+# Local course/reference files that are not cloud-repository deliverables
+/docs/*.pdf
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
