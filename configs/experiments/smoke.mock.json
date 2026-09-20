@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "model": {
+    "backend": "mock",
+    "canonical_model_id": "development/mock",
+    "model_revision": "local",
+    "model_path_env": "LLAVA_MODEL_PATH",
+    "device": "cpu",
+    "quantization": "none",
+    "mmsep": {
+      "enabled": false
+    }
+  },
+  "generation": {
+    "do_sample": false,
+    "temperature": 0.0,
+    "num_beams": 1,
+    "max_new_tokens": 64
+  },
+  "experiment": {
+    "mode": "baseline",
+    "seeds": [42],
+    "repetitions": 1
+  }
+}

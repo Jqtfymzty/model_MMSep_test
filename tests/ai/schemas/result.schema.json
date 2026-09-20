@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mmsep/result.schema.json",
+  "title": "MMSep Inference Result",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "run_id",
+    "case_id",
+    "model_id",
+    "model_revision",
+    "mode",
+    "seed",
+    "output_text",
+    "duration_ms",
+    "metrics",
+    "timestamp",
+    "git_commit",
+    "config_hash",
+    "device",
+    "input_hash",
+    "evidence_refs"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "model_revision": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["baseline", "mmsep"]},
+    "seed": {"type": "integer"},
+    "output_text": {"type": "string"},
+    "duration_ms": {"type": "number", "minimum": 0},
+    "metrics": {"type": "object"},
+    "timestamp": {"type": "string"},
+    "git_commit": {"type": "string"},
+    "config_hash": {"type": "string"},
+    "device": {"type": "string"},
+    "input_hash": {"type": "string"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "error": {"type": ["string", "null"]},
+    "metadata": {"type": "object"}
+  }
+}
+

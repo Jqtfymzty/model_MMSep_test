@@ -1,0 +1,4 @@
+# Official LLaVA package and its pinned inference stack.
+# Use Python 3.10; a cloud Linux CUDA environment is recommended.
+llava-torch==1.2.2.post1
+Pillow==10.2.0
