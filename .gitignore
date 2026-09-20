@@ -4,6 +4,14 @@
 !.env.example
 *.key
 /configs/**/*.local.json
+/configs/model/config.json
+/configs/model/generation_config.json
+/configs/model/gitattributes
+/configs/model/mm_projector.bin
+/configs/model/pytorch_model*.bin
+/configs/model/special_tokens_map.json
+/configs/model/tokenizer*
+/configs/model/clip-vit-large-patch14-336/
 
 # Python caches and local tooling
 __pycache__/
@@ -41,6 +49,11 @@ mm_projector.bin
 
 # Local course/reference files that are not cloud-repository deliverables
 /docs/*.pdf
+/docs/附录*
+/docs/WJN_TASKS.md
+/docs/PROJECT_STRUCTURE.md
+/docs/LOCAL_LLAVA_POWERSHELL.md
+/docs/MMSEP_LOCAL_TEST.md
 
 # OS/editor files
 .DS_Store
