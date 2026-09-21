@@ -1,0 +1,90 @@
+{
+  "batch_id": "module2-formal-0bd7e93-001",
+  "generated_at": "2026-09-20T14:44:25.500694+00:00",
+  "files": {
+    "inputs/M2-FAI-101-shared.png": {
+      "bytes": 14951,
+      "sha256": "711dfd7a3bf0a7c575e6270271b09af3441651a0dafa14045e545d8e2642905b"
+    },
+    "inputs/M2-FAI-102-shared.png": {
+      "bytes": 14951,
+      "sha256": "711dfd7a3bf0a7c575e6270271b09af3441651a0dafa14045e545d8e2642905b"
+    },
+    "inputs/M2-FAI-201-shared.png": {
+      "bytes": 14951,
+      "sha256": "711dfd7a3bf0a7c575e6270271b09af3441651a0dafa14045e545d8e2642905b"
+    },
+    "inputs/M2-FUN-101-clean.png": {
+      "bytes": 2990,
+      "sha256": "dd8b90604077787ed069e9f1d60d9b126526dc5110553e971f96907461422632"
+    },
+    "inputs/M2-FUN-201-clean.png": {
+      "bytes": 4237,
+      "sha256": "8dcc3ad06b6b499c3a20057d7bab634c7759ea01b84381f68ce2d35c9ee23198"
+    },
+    "inputs/M2-FUN-202-clean.png": {
+      "bytes": 2918,
+      "sha256": "cada0f56d969cebcedf8f1abe20fd494d1b47a6d85a304bd7a3b91dd5603ac7b"
+    },
+    "inputs/M2-PER-201-scene.png": {
+      "bytes": 8781,
+      "sha256": "d696dc80ff2e6b19bb8ad23b7c7d732936c7551d0d103afc3c9c89520c4e5f86"
+    },
+    "inputs/M2-PER-202-process.png": {
+      "bytes": 7431,
+      "sha256": "25ab7cd52dcfdeb4ff06c6240a582596e600fa8b0805fc0bc2a0072b1219c550"
+    },
+    "inputs/M2-ROB-101-blurred.png": {
+      "bytes": 2005,
+      "sha256": "2da2b999ba2df1d52b7414491c4e2682873425951b300f9bfb6acc5fd4be4695"
+    },
+    "inputs/M2-ROB-101-clean.png": {
+      "bytes": 1893,
+      "sha256": "5a004abdfb51192588410995ff72533c753af5fb24435a38fb8da8062a823391"
+    },
+    "inputs/M2-ROB-102-shared.png": {
+      "bytes": 1893,
+      "sha256": "5a004abdfb51192588410995ff72533c753af5fb24435a38fb8da8062a823391"
+    },
+    "inputs/M2-ROB-201-clean.png": {
+      "bytes": 3127,
+      "sha256": "45b25d397473fb69a02b28dbbad0d121b40b4dfb9fe15a68c2540a980c32b19f"
+    },
+    "inputs/M2-ROB-201-low-contrast.png": {
+      "bytes": 3127,
+      "sha256": "8e82bd505202e59e3ed0c9557d34cd5148887fd4b41051a0949c861f30278db7"
+    },
+    "inputs/M2-ROB-202-clean.png": {
+      "bytes": 2918,
+      "sha256": "cada0f56d969cebcedf8f1abe20fd494d1b47a6d85a304bd7a3b91dd5603ac7b"
+    },
+    "inputs/M2-ROB-202-occluded.png": {
+      "bytes": 2933,
+      "sha256": "75aa830cc40f8f547de758cf46c46ace9ec341cdd5ef859ab0f97b2f9f6deefe"
+    },
+    "inputs/M2-SEC-101-injection.png": {
+      "bytes": 12347,
+      "sha256": "8b6b60b7db7644077dde9d4e2b316129511681285d96255b5fe1c3e716c0567d"
+    },
+    "inputs/M2-SEC-102-request.png": {
+      "bytes": 14947,
+      "sha256": "35de63dec389fb61f0468684cea0d5c37baa0ec6311f101b3e7112bae5ada353"
+    },
+    "inputs/M2-SEC-201-secret.png": {
+      "bytes": 15871,
+      "sha256": "76f61ffc9427dab20ca3ef2246f5272b4020f4fe8606cca9e10d1a06993a8faa"
+    },
+    "raw/results.jsonl": {
+      "bytes": 184910,
+      "sha256": "f588d6d21635218a275a53e636d6c347671eddb61f58cd1c281fe7f61ddbf04b"
+    },
+    "summary/environment.json": {
+      "bytes": 365,
+      "sha256": "57490a85cd23ab2d3fb628bbafffc1da05a668fbc239169f55b7024e0baf228e"
+    },
+    "summary/summary.json": {
+      "bytes": 50120,
+      "sha256": "bfa3463e0d67bc4c37f24702f1d92dde0b7b50585e5ba8c03cdd5840fb7926b8"
+    }
+  }
+}
