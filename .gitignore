@@ -55,6 +55,11 @@ mm_projector.bin
 /docs/LOCAL_LLAVA_POWERSHELL.md
 /docs/MMSEP_LOCAL_TEST.md
 
+# Local presentation recording materials
+/交付件/模块二演示视频讲解稿.md
+/交付件/本地材料/
+/.codex_artifacts/
+
 # OS/editor files
 .DS_Store
 Thumbs.db

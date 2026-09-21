@@ -138,8 +138,3 @@ GPU 和互联网访问，然后将已经审核的 `artifacts/kaggle/mmsep_kaggle
 测试图片添加为 Notebook 输入。笔记本会将环境和模型的两个组成部分存放在非持久化暂存盘中。
 只有测试证据会写入 `/kaggle/working/mmsep_results`，因此大型模型不会占用已保存的
 Notebook Output 配额。
-
-## GitHub 安全门禁
-
-AI 工具可以准备本地修改和差异，但在没有针对当前操作重新进行人工审核并获得明确许可前，
-不得自行推送、上传、创建拉取请求或执行合并。
