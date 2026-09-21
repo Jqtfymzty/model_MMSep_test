@@ -10,8 +10,11 @@ from transformers.cache_utils import Cache
 
 class MMSepCache(Cache):
     """
-    A cache as described in the [MMSep paper - KDD 2026](https://arxiv.org/abs/2412.12094).
-    Derived from Cache class in HuggingFace Transformers and MMSepCache in SepLLM (ICML 2025).
+    A prototype cache used by this project to evaluate MMSep-style compression.
+
+    The MMSep paper is published at https://doi.org/10.1145/3770855.3817821.
+    This class is derived from HuggingFace Transformers' Cache and the public
+    SepLLM cache implementation; it is not a claim of full paper reproduction.
     """    
     @staticmethod
     def slice_on_1d(x, start, end):
