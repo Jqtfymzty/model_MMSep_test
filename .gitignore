@@ -59,6 +59,7 @@ mm_projector.bin
 /.codex_artifacts/
 /交付件/*讲解稿*.md
 /交付件/*.mp4
+!/交付件/模块二AI测试演示视频.mp4
 /交付件/*.mov
 /交付件/*.mkv
 /交付件/*.wav
