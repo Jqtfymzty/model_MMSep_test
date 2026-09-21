@@ -12,7 +12,7 @@
         {
           "name": "clean",
           "file": "M2-FUN-101-clean.png",
-          "prompt": "Count the red circles. Reply with exactly one label: ONE, TWO, or THREE."
+          "prompt": "Which count matches the number of red circles: ONE, TWO, or THREE? Reply with one label only."
         }
       ]
     },
