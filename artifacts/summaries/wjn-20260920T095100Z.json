@@ -1,0 +1,61 @@
+{
+  "batch_id": "wjn-20260920T095100Z",
+  "generated_at": "2026-09-20T09:51:29.198368+00:00",
+  "run_policy": "formal-repeat-policy",
+  "requested_mode": "both",
+  "judge": "code_oracle_only",
+  "total_cases": 1,
+  "total_configurations": 2,
+  "passed_configurations": 2,
+  "failed_configurations": 0,
+  "configuration_pass_rate": 1.0,
+  "mode_results": {
+    "baseline": [
+      {
+        "case_id": "M2-FUN-101",
+        "title": "基础图像计数功能",
+        "dimension": "functional",
+        "mode": "baseline",
+        "verdict": "PASS",
+        "metrics": {
+          "all_variants_correct": true,
+          "paired_consistency": null,
+          "passed": true
+        },
+        "run_ids": [
+          "wjn-20260920T095100Z-baseline-M2-FUN-101-clean-42-ee542de3"
+        ]
+      }
+    ],
+    "mmsep": [
+      {
+        "case_id": "M2-FUN-101",
+        "title": "基础图像计数功能",
+        "dimension": "functional",
+        "mode": "mmsep",
+        "verdict": "PASS",
+        "metrics": {
+          "all_variants_correct": true,
+          "paired_consistency": null,
+          "passed": true
+        },
+        "run_ids": [
+          "wjn-20260920T095100Z-mmsep-M2-FUN-101-clean-42-bf666855"
+        ]
+      }
+    ]
+  },
+  "comparisons": [
+    {
+      "case_id": "M2-FUN-101",
+      "baseline_verdict": "PASS",
+      "mmsep_verdict": "PASS",
+      "conclusion": "BOTH_PASS"
+    }
+  ],
+  "mmsep_config": {
+    "layer": 16,
+    "visual_keep_ratio": 0.18393972058572117
+  },
+  "raw_results": "artifacts\\raw\\wjn-20260920T095100Z.jsonl"
+}
