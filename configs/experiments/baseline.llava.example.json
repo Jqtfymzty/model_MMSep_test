@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "model": {
+    "backend": "llava",
+    "canonical_model_id": "liuhaotian/llava-v1.5-7b",
+    "download_source": "modelscope:huangjianuo/llava-v1.5-7b",
+    "model_revision": "modelscope-master/index-sha256-487578d3f7ec21c057596d0f9dc71084acc349eb8f13bd8b5af86c26460f2d31",
+    "model_path_env": "LLAVA_MODEL_PATH",
+    "vision_tower_path_env": "LLAVA_VISION_TOWER_PATH",
+    "llava_code_path_env": "LLAVA_CODE_PATH",
+    "device": "auto",
+    "quantization": "4bit",
+    "mmsep": {
+      "enabled": false
+    }
+  },
+  "generation": {
+    "do_sample": false,
+    "temperature": 0.0,
+    "num_beams": 1,
+    "max_new_tokens": 512
+  },
+  "experiment": {
+    "mode": "baseline",
+    "seeds": [42],
+    "repetitions": 1
+  }
+}

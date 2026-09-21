@@ -143,6 +143,7 @@ class LocalLlavaAdapter:
             generation_kwargs["past_key_values"] = mmsep_cache
 
         torch.cuda.reset_peak_memory_stats()
+        torch.cuda.synchronize()
         started = time.perf_counter()
         try:
             with torch.inference_mode():
@@ -162,6 +163,7 @@ class LocalLlavaAdapter:
                 "CUDA 显存不足；请关闭占用显存的软件或减小 --max-new-tokens"
             ) from exc
 
+        torch.cuda.synchronize()
         duration_ms = round((time.perf_counter() - started) * 1000, 2)
         peak_memory_gib = round(torch.cuda.max_memory_allocated() / 1024**3, 3)
         output = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
@@ -170,6 +172,8 @@ class LocalLlavaAdapter:
             "output": output,
             "duration_ms": duration_ms,
             "peak_memory_gib": peak_memory_gib,
+            "output_tokens": int(output_ids.shape[-1]),
+            "input_tokens": int(input_ids.shape[-1]),
             "seed": seed,
             "mode": mode,
             "mmsep": mmsep_cache.stats() if mmsep_cache is not None else None,

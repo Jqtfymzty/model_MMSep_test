@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mmsep/case.schema.json",
+  "title": "MMSep AI Test Case",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["case_id", "title", "dimension", "formal", "input"],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "pattern": "^M2-(FUN|ROB|SEC|FAI|PER)-[0-9]{3}$"
+    },
+    "title": {"type": "string", "minLength": 1},
+    "dimension": {
+      "enum": ["functional", "robustness", "security", "fairness", "performance"]
+    },
+    "formal": {"type": "boolean"},
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "image_ref"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1},
+        "image_ref": {"type": ["string", "null"]}
+      }
+    },
+    "metadata": {"type": "object"}
+  }
+}
+

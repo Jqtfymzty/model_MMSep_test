@@ -1,0 +1,2 @@
+{"case_id":"M2-FUN-000","title":"Development-only runner smoke case","dimension":"functional","formal":false,"input":{"text":"Return a deterministic development response.","image_ref":null},"metadata":{"note":"This fixture must not be counted among the 15 formal cases."}}
+
