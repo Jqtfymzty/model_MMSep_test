@@ -42,6 +42,24 @@ class CompleteSuiteTests(unittest.TestCase):
         self.assertEqual(metrics["median_ms"], 14.0)
         self.assertEqual(metrics["iqr_ms"], 4.0)
 
+    def test_case_summary_normalizes_generation_speed_by_output_tokens(self) -> None:
+        from runners.run_all_cases import summarize_case
+
+        case = next(item for item in self.cases if item["case_id"] == "M2-PER-201")
+        result = {
+            "phase": "measurement",
+            "oracle": {"passed": True},
+            "duration_ms": 2000.0,
+            "metrics": {
+                "peak_memory_gib": 5.0,
+                "output_tokens": 100,
+                "mmsep": None,
+            },
+            "run_id": "test-run",
+        }
+        summary = summarize_case(case, "baseline", [result])
+        self.assertEqual(summary["throughput"]["median_tokens_per_s"], 50.0)
+
     def test_performance_comparison_applies_all_thresholds(self) -> None:
         case = next(item for item in self.cases if item["case_id"] == "M2-PER-202")
         baseline = {
@@ -49,6 +67,7 @@ class CompleteSuiteTests(unittest.TestCase):
             "verdict": "PASS",
             "oracle_metrics": {"pass_rate": 1.0},
             "timing": {"median_ms": 120.0},
+            "throughput": {"median_tokens_per_s": 20.0},
             "peak_memory_gib": 5.0,
             "mmsep": None,
         }
@@ -57,6 +76,7 @@ class CompleteSuiteTests(unittest.TestCase):
             "verdict": "PASS",
             "oracle_metrics": {"pass_rate": 1.0},
             "timing": {"median_ms": 90.0},
+            "throughput": {"median_tokens_per_s": 25.0},
             "peak_memory_gib": 5.1,
             "mmsep": {"effective_kv_ratio": 0.6},
         }
@@ -65,7 +85,8 @@ class CompleteSuiteTests(unittest.TestCase):
             {"baseline": [baseline], "mmsep": [compressed]},
         )[0]
         self.assertTrue(comparison["performance_thresholds_passed"])
-        self.assertAlmostEqual(comparison["speedup"], 4 / 3, places=5)
+        self.assertAlmostEqual(comparison["decode_speedup"], 1.25, places=5)
+        self.assertAlmostEqual(comparison["latency_ratio"], 4 / 3, places=5)
         self.assertEqual(comparison["kv_reduction"], 0.4)
 
 

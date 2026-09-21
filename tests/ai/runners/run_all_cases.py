@@ -182,6 +182,13 @@ def summarize_case(case: dict[str, Any], mode: str, results: list[dict[str, Any]
     durations = [float(item["duration_ms"]) for item in measurements if item["duration_ms"] is not None]
     peaks = [float(item["metrics"]["peak_memory_gib"]) for item in measurements if item["metrics"]["peak_memory_gib"] is not None]
     output_tokens = [int(item["metrics"]["output_tokens"]) for item in measurements if item["metrics"]["output_tokens"] is not None]
+    throughputs = [
+        float(item["metrics"]["output_tokens"]) / (float(item["duration_ms"]) / 1000.0)
+        for item in measurements
+        if item["metrics"]["output_tokens"] is not None
+        and item["duration_ms"] is not None
+        and float(item["duration_ms"]) > 0
+    ]
     mmsep_stats = [item["metrics"]["mmsep"] for item in measurements if item["metrics"]["mmsep"] is not None]
     return {
         "case_id": case["case_id"],
@@ -193,6 +200,10 @@ def summarize_case(case: dict[str, Any], mode: str, results: list[dict[str, Any]
         "verdict": "PASS" if oracle["passed"] else "FAIL",
         "oracle_metrics": oracle,
         "timing": timing_summary(durations),
+        "throughput": {
+            "count": len(throughputs),
+            "median_tokens_per_s": round(statistics.median(throughputs), 6) if throughputs else None,
+        },
         "peak_memory_gib": max(peaks) if peaks else None,
         "median_output_tokens": statistics.median(output_tokens) if output_tokens else None,
         "mmsep": mmsep_stats[-1] if mmsep_stats else None,
@@ -219,7 +230,14 @@ def compare_modes(
         quality_retention = mmsep_rate / base_rate if base_rate > 0 else None
         base_median = base["timing"]["median_ms"]
         mmsep_median = compressed["timing"]["median_ms"]
-        speedup = base_median / mmsep_median if base_median and mmsep_median else None
+        latency_ratio = base_median / mmsep_median if base_median and mmsep_median else None
+        base_throughput = base["throughput"]["median_tokens_per_s"]
+        mmsep_throughput = compressed["throughput"]["median_tokens_per_s"]
+        decode_speedup = (
+            mmsep_throughput / base_throughput
+            if base_throughput and mmsep_throughput
+            else None
+        )
         base_peak = base["peak_memory_gib"]
         mmsep_peak = compressed["peak_memory_gib"]
         vram_increase = (mmsep_peak - base_peak) / base_peak if base_peak and mmsep_peak else None
@@ -243,7 +261,9 @@ def compare_modes(
                 quality_retention is not None and quality_retention >= thresholds["quality_retention_min"]
             )
         if "speedup_min" in thresholds:
-            threshold_checks["speedup"] = speedup is not None and speedup >= thresholds["speedup_min"]
+            threshold_checks["decode_speedup"] = (
+                decode_speedup is not None and decode_speedup >= thresholds["speedup_min"]
+            )
         if "kv_reduction_min" in thresholds:
             threshold_checks["kv_reduction"] = (
                 kv_reduction is not None and kv_reduction >= thresholds["kv_reduction_min"]
@@ -265,7 +285,10 @@ def compare_modes(
                 "quality_retention": round(quality_retention, 6) if quality_retention is not None else None,
                 "baseline_median_ms": base_median,
                 "mmsep_median_ms": mmsep_median,
-                "speedup": round(speedup, 6) if speedup is not None else None,
+                "latency_ratio": round(latency_ratio, 6) if latency_ratio is not None else None,
+                "baseline_median_tokens_per_s": base_throughput,
+                "mmsep_median_tokens_per_s": mmsep_throughput,
+                "decode_speedup": round(decode_speedup, 6) if decode_speedup is not None else None,
                 "baseline_peak_memory_gib": base_peak,
                 "mmsep_peak_memory_gib": mmsep_peak,
                 "vram_increase": round(vram_increase, 6) if vram_increase is not None else None,
