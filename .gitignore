@@ -55,10 +55,23 @@ mm_projector.bin
 /docs/LOCAL_LLAVA_POWERSHELL.md
 /docs/MMSEP_LOCAL_TEST.md
 
-# Local presentation recording materials
-/交付件/模块二演示视频讲解稿.md
-/交付件/本地材料/
+# Local authoring, review and recording materials
 /.codex_artifacts/
+/交付件/*讲解稿*.md
+/交付件/*.mp4
+/交付件/*.mov
+/交付件/*.mkv
+/交付件/*.wav
+/交付件/*.m4a
+/交付件/本地材料/
+/交付件/录制素材/
+~$*
+
+# Collaborator-local drafts and smoke helpers
+/tests/ai/runners/smoke_test_llava.py
+/reports/WJN_DEFECT_REPORT.tex
+/reports/WJN_DEFECT_REPORT.docx
+/docs/WJN_VIDEO_SCRIPT.md
 
 # OS/editor files
 .DS_Store
